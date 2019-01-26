@@ -6,6 +6,6 @@ Created on Fri Jan 25 21:36:45 2019
 @author: nmp
 """
 
-name = "antidotedb"
+name = "antidotedb.proto"
 
-from .antidoteclient import *
+from .antidote_pb2 import *

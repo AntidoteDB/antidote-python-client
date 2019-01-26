@@ -8,7 +8,7 @@ Created on Tue Jan 22 11:23:50 2019
 
 import socket                                         
 import struct
-from proto.antidote_pb2 import *
+from antidotedb.proto import *
 
 class AntidoteException(Exception):
     pass

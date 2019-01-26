@@ -7,12 +7,13 @@ Created on Tue Jan 22 11:23:50 2019
 """
 
 from antidotedb import *
+import sys
 
-def test_counter() :
+def test_counter( server = "localhost", port = 8087) :
     key = Key( "some_bucket", "some_key_fatcounter", "COUNTER")
     key2 = Key( "some_bucket", "some_other_key_fatcounter", "COUNTER")
     
-    clt = AntidoteClient( 'localhost', 8087)
+    clt = AntidoteClient(server,port)
     tx = clt.start_transaction()
     res = tx.read_objects( key)
     assert( type(res[0]) == Counter)
@@ -39,11 +40,11 @@ def test_counter() :
     assert( res[0].value() == val + 3)
     return res
 
-def test_fatcounter() :
+def test_fatcounter(server = "localhost", port = 8087) :
     key = Key( "some_bucket", "some_key_counter", "FATCOUNTER")
     key2 = Key( "some_bucket", "some_other_key_counter", "FATCOUNTER")
     
-    clt = AntidoteClient( 'localhost', 8087)
+    clt = AntidoteClient(server,port)
     tx = clt.start_transaction()
     res = tx.read_objects( key)
     assert( type(res[0]) == Counter)
@@ -70,10 +71,10 @@ def test_fatcounter() :
     assert( res[0].value() == val + 3)
     return res
 
-def test_lwwreg() :
+def test_lwwreg(server = "localhost", port = 8087) :
     key = Key( "some_bucket", "some_key_lwwreg1", "LWWREG")
     val = bytes("lightkone",'utf-8')
-    clt = AntidoteClient( 'localhost', 8087)
+    clt = AntidoteClient(server,port)
     tx = clt.start_transaction()
     res = tx.read_objects( key)
     assert( type(res[0]) == Register)
@@ -87,12 +88,12 @@ def test_lwwreg() :
     return res
 
 
-def test_mvreg() :
+def test_mvreg(server = "localhost", port = 8087) :
     key = Key( "some_bucket", "some_key_mvreg", "MVREG")
     val1 = bytes("lightkone",'utf-8')
     val2 = bytes("syncfree",'utf-8')
 
-    clt1 = AntidoteClient( 'localhost', 8087)
+    clt1 = AntidoteClient(server,port)
     tx1 = clt1.start_transaction()
     res = tx1.read_objects( key)
     assert( type(res[0]) == MVRegister)
@@ -114,13 +115,13 @@ def test_mvreg() :
     assert( len(res[0].values()) == 0)
     return res
 
-def test_orset() :
+def test_orset(server = "localhost", port = 8087) :
     key = Key( "some_bucket", "some_key_orset", "ORSET")
     val1 = bytes("lightkone",'utf-8')
     val2 = bytes("syncfree",'utf-8')
     val3 = bytes("concordant",'utf-8')
     
-    clt = AntidoteClient( 'localhost', 8087)
+    clt = AntidoteClient(server,port)
     tx = clt.start_transaction()
     res = tx.read_objects( key)
     assert( type(res[0]) == Set)
@@ -150,13 +151,13 @@ def test_orset() :
     assert( val3 in res[0].values())
     return res
 
-def test_rwset() :
+def test_rwset(server = "localhost", port = 8087) :
     key = Key( "some_bucket", "some_key_rwset", "RWSET")
     val1 = bytes("lightkone",'utf-8')
     val2 = bytes("syncfree",'utf-8')
     val3 = bytes("concordant",'utf-8')
     
-    clt = AntidoteClient( 'localhost', 8087)
+    clt = AntidoteClient(server,port)
     tx = clt.start_transaction()
     res = tx.read_objects( key)
     assert( type(res[0]) == Set)
@@ -186,10 +187,10 @@ def test_rwset() :
     assert( val3 in res[0].values())
     return res
 
-def test_flagew() :
+def test_flagew(server = "localhost", port = 8087) :
     key = Key( "some_bucket", "some_key_flagew", "FLAG_EW")
     
-    clt = AntidoteClient( 'localhost', 8087)
+    clt = AntidoteClient(server,port)
     tx = clt.start_static_transaction()
     res = tx.read_objects( key)
     assert( type(res[0]) == Flag)
@@ -210,10 +211,10 @@ def test_flagew() :
     assert( not res[0].value())
     return res
 
-def test_flagdw() :
+def test_flagdw(server = "localhost", port = 8087) :
     key = Key( "some_bucket", "some_key_flagdw", "FLAG_DW")
     
-    clt = AntidoteClient( 'localhost', 8087)
+    clt = AntidoteClient(server,port)
     tx = clt.start_static_transaction()
     res = tx.read_objects( key)
     assert( type(res[0]) == Flag)
@@ -234,7 +235,7 @@ def test_flagdw() :
     assert( not res[0].value())
     return res
 
-def test_gmap() :
+def test_gmap(server = "localhost", port = 8087) :
     key = Key( "some_bucket", "some_key_gmap", "GMAP")
     k1 = bytes("k1",'utf-8')
     k2 = bytes("k2",'utf-8')
@@ -242,7 +243,7 @@ def test_gmap() :
     val2 = bytes("syncfree",'utf-8')
     val3 = bytes("concordant",'utf-8')
     
-    clt = AntidoteClient( 'localhost', 8087)
+    clt = AntidoteClient(server,port)
     tx = clt.start_transaction()
     res = tx.read_objects( key)
     assert( res)
@@ -264,7 +265,7 @@ def test_gmap() :
 
     return res
 
-def test_rrmap() :
+def test_rrmap(server = "localhost", port = 8087) :
     key = Key( "some_bucket", "some_key_rrmap", "RRMAP")
     k1 = bytes("k1",'utf-8')
     k2 = bytes("k2",'utf-8')
@@ -272,7 +273,7 @@ def test_rrmap() :
     val2 = bytes("syncfree",'utf-8')
     val3 = bytes("concordant",'utf-8')
     
-    clt = AntidoteClient( 'localhost', 8087)
+    clt = AntidoteClient(server,port)
     tx = clt.start_transaction()
     res = tx.read_objects( key)
     assert( res)
@@ -296,20 +297,23 @@ def test_rrmap() :
     return res
 
 
-def test_all():
-    res = test_counter()
-    res = test_fatcounter()
-    res = test_lwwreg()
-    res = test_mvreg()
-    res = test_orset()
-    res = test_rwset()
-    res = test_flagew()
-    res = test_flagdw()
-    res = test_gmap()
-    res = test_rrmap()
+def test_all(server = "localhost", port = 8087):
+    res = test_counter(server,port)
+    res = test_fatcounter(server,port)
+    res = test_lwwreg(server,port)
+    res = test_mvreg(server,port)
+    res = test_orset(server,port)
+    res = test_rwset(server,port)
+    res = test_flagew(server,port)
+    res = test_flagdw(server,port)
+    res = test_gmap(server,port)
+    res = test_rrmap(server,port)
     return res
 
 
-test_all()
-
-
+if len(sys.argv) == 1:
+    test_all(str(sys.argv[0]),8087)
+elif len(sys.argv) == 2:
+    test_all(str(sys.argv[0]),int(sys.argv[0]))
+else:
+    test_all()

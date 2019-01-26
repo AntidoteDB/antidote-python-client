@@ -6,6 +6,8 @@ Created on Tue Jan 22 11:23:50 2019
 @author: nmp
 """
 
+from antidotedb import *
+
 def test_counter() :
     key = Key( "some_bucket", "some_key_fatcounter", "COUNTER")
     key2 = Key( "some_bucket", "some_other_key_fatcounter", "COUNTER")
@@ -308,6 +310,6 @@ def test_all():
     return res
 
 
-
+test_all()
 
 

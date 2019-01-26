@@ -13,14 +13,14 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="antidotedb",
-    version="0.0.1",
+    version="0.0.2",
     author="Nuno Preguica",
     author_email="nuno.preguica@fct.unl.pt",
     description="AntidoteDB Python clients",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/AntidoteDB/antidote-python-client/tree/master/src/main/python/antidotedb",
-    packages=setuptools.find_packages(),
+    packages=['antidotedb'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",

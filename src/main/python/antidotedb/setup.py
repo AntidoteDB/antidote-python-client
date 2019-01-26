@@ -19,11 +19,11 @@ setuptools.setup(
     description="AntidoteDB Python clients",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/AntidoteDB/antidote-python-client/tree/master/src/main/python/antidotedb",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: Apache 2 License",
+        "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
 )

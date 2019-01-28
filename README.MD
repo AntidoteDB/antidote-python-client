@@ -245,7 +245,7 @@ are available in the AntidoteDB data type -- check the AntidoteDB documentation)
 
 Any help on developing this code is welcome. Feel free to open pull requests or open issues.
 
-Testing the AntidoteDB client required an Antidote instance running. 
+Testing the AntidoteDB client requires an Antidote instance running. 
 You can use Docker to start an instance in your local machine:
 
     docker run -d -p "8087:8087" antidotedb/antidote

@@ -54,6 +54,30 @@ class Counter :
         def recordOp( self, op) :
             op.counterop.inc = self.val
 
+    def resetOp( self) :
+        return Counter.ResetOp( self.key)
+
+    # def resetKeyOp(key) :
+    #     return Counter.ResetOp( key)
+
+    class ResetOp:
+        def __init__(self, key, data_type = None):
+            self.key = key
+            if data_type == None :
+                self.data_type = key.data_type
+            else:
+                self.data_type = CRDT_type.Value(data_type)
+
+        def getType( self) :
+            return self.data_type
+
+        def getKey( self) :
+            return self.key
+
+        def recordOp( self, op) :
+            op.resetop.SetInParent()
+
+
 class Flag :
     """ Represents a register object
     """
@@ -67,17 +91,17 @@ class Flag :
     def enableOp( self) :
         return Flag.UpdateOp( self.key, True)
 
-    def enableKeyOp( key) :
-        return Flag.UpdateOp( key, True)
+    # def enableKeyOp( key) :
+    #     return Flag.UpdateOp( key, True)
 
     def disableOp( self) :
         return Flag.UpdateOp( self.key, False)
 
-    def disableKeyOp( key) :
-        return Flag.UpdateOp( key, False)
+    # def disableKeyOp( key) :
+    #     return Flag.UpdateOp( key, False)
 
-    def updateKeyOp( val, key) : 
-        return Flag.UpdateOp( key, val)
+    # def updateKeyOp( val, key) :
+    #     return Flag.UpdateOp( key, val)
  
     class UpdateOp:
         def __init__(self, key, val, data_type = None):
@@ -100,8 +124,8 @@ class Flag :
     def resetOp( self) :
         return Flag.ResetOp( self.key)
 
-    def resetKeyOp(key) :
-        return Flag.ResetOp( key)
+    # def resetKeyOp(key) :
+    #     return Flag.ResetOp( key)
 
     class ResetOp:
         def __init__(self, key, data_type = None):
@@ -138,8 +162,8 @@ class Register :
     def assignOp( self, val) :
         return Register.AssignOp( self.key, val)
 
-    def assignKeyOp( val, key) :
-        return Register.AssignOp( key, val)
+    # def assignKeyOp( val, key) :
+    #     return Register.AssignOp( key, val)
     
     class AssignOp:
         def __init__(self, key, val, data_type = None):
@@ -158,6 +182,29 @@ class Register :
 
         def recordOp( self, op) :
             op.regop.value = self.val
+
+    def resetOp( self) :
+        return Register.ResetOp( self.key)
+
+    # def resetKeyOp(key) :
+    #     return Register.ResetOp( key)
+
+    class ResetOp:
+        def __init__(self, key, data_type = None):
+            self.key = key
+            if data_type == None :
+                self.data_type = key.data_type
+            else:
+                self.data_type = CRDT_type.Value(data_type)
+
+        def getType( self) :
+            return self.data_type
+
+        def getKey( self) :
+            return self.key
+
+        def recordOp( self, op) :
+            op.resetop.SetInParent()
 
     def __repr__( self):
         return self.key.data_type_name + ' { val : ' + str(self.val) + '}'
@@ -200,8 +247,8 @@ class MVRegister :
     def resetOp( self) :
         return MVRegister.ResetOp( self.key)
 
-    def resetKeyOp(key) :
-        return MVRegister.ResetOp( key)
+    # def resetKeyOp(key) :
+    #     return MVRegister.ResetOp( key)
 
     class ResetOp:
         def __init__(self, key, data_type = None):
@@ -236,8 +283,8 @@ class Set :
     def addOp( self, val) :
         return Set.AddOp( self.key, val)
 
-    def addKeyOp( val, key) : 
-        return Set.AddOp( key, val)
+    # def addKeyOp( val, key) :
+    #     return Set.AddOp( key, val)
     
     class AddOp:
         def __init__(self, key, val, data_type = None):
@@ -263,8 +310,8 @@ class Set :
     def removeOp( self, val) :
         return Set.RemoveOp( self.key, val)
 
-    def removeKeyOp( val, key) : 
-        return Set.RemoveOp( key, val)    
+    # def removeKeyOp( val, key) :
+    #     return Set.RemoveOp( key, val)
     
     class RemoveOp:
         def __init__(self, key, val, data_type = None):
@@ -286,7 +333,30 @@ class Set :
         def recordOp( self, op) :
             op.setop.optype = ApbSetUpdate.SetOpType.Value('REMOVE')
             op.setop.rems.extend( self.val)
-    
+
+    def resetOp( self) :
+        return Set.ResetOp( self.key)
+
+    # def resetKeyOp(key) :
+    #     return Set.ResetOp( key)
+
+    class ResetOp:
+        def __init__(self, key, data_type = None):
+            self.key = key
+            if data_type == None :
+                self.data_type = key.data_type
+            else:
+                self.data_type = CRDT_type.Value(data_type)
+
+        def getType( self) :
+            return self.data_type
+
+        def getKey( self) :
+            return self.key
+
+        def recordOp( self, op) :
+            op.resetop.SetInParent()
+
     def __repr__( self):
         return self.key.data_type_name + ' { val : ' + str(self.vals) + '}'
 
@@ -303,8 +373,8 @@ class Map :
     def updateOp( self, upds) :
         return Map.UpdateOp( self.key, upds)   
 
-    def updateKeyOp( upds, key) :
-        return Map.UpdateOp( key, upds)   
+    # def updateKeyOp( upds, key) :
+    #     return Map.UpdateOp( key, upds)
     
     class UpdateOp:
         def __init__(self, key, upds, data_type = None):
@@ -333,8 +403,8 @@ class Map :
     def removeOp( self, keys) :
         return Map.RemoveOp( self.key, keys)   
 
-    def removeKeyOp( upds, keys) :
-        return Map.RemoveOp( key, keys)   
+    # def removeKeyOp( upds, keys) :
+    #     return Map.RemoveOp( key, keys)
     
     class RemoveOp:
         def __init__(self, key, keys, data_type = None):
@@ -359,7 +429,29 @@ class Map :
                 op.key = opkey.key
                 op.type = opkey.data_type
 
-    
+    def resetOp( self) :
+        return Map.ResetOp( self.key)
+
+    # def resetKeyOp(key) :
+    #     return Map.ResetOp( key)
+
+    class ResetOp:
+        def __init__(self, key, data_type = None):
+            self.key = key
+            if data_type == None :
+                self.data_type = key.data_type
+            else:
+                self.data_type = CRDT_type.Value(data_type)
+
+        def getType( self) :
+            return self.data_type
+
+        def getKey( self) :
+            return self.key
+
+        def recordOp( self, op) :
+            op.resetop.SetInParent()
+
     def __repr__( self):
         return self.key.data_type_name + str(self.vals)
 

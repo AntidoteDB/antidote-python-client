@@ -234,7 +234,8 @@ The following **update** operations are available:
 
 ### Generic operations
 
-The following **update** operations are available in all data types:
+The following **update** operations are available in all data types (when they 
+are available in the AntidoteDB data type -- check the AntidoteDB documentation):
 
 * **Type.ResetOp(key)**, for resetting the value.
 

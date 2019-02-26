@@ -22,7 +22,7 @@ example.
 
     from antidotedb import *
     
-    server = 'locahost'
+    server = 'localhost'
     port = 8087
     
     clt = AntidoteClient(server, port)
@@ -39,7 +39,7 @@ the _commit_ method returns _True_.
 
     ok = tx.commit()
 
-_abot_ method rollbacks the transactions.
+_abort_ method rollbacks the transactions.
  
     tx.abort()
 

@@ -644,14 +644,11 @@ class InteractiveTransaction :
         return res.success == True
 
     def abort( self) :
-        """ Commit transaction. Commit time gets recoded in AntidoteClient as 
-        last_commit
+        """ Abort transaction
         """
         op = ApbAbortTransaction()
         op.transaction_descriptor = self.txDescriptor
-        self.antidoteClient.sendMessageCommitTransaction( op)
-        res = self.antidoteClient.recvMessageCommitResp()
-        return res
+        self.antidoteClient.sendMessageAbortTransaction( op)
 
             
     

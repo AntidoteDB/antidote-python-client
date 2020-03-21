@@ -493,7 +493,7 @@ class Key :
             self.data_type_name = data_type
    
 class StaticTransaction :
-    """" Class for an interative transaction """
+    """" Class for an static transaction """
     def __init__(self, clt, red_blue):
         self.antidoteClient = clt
         self.red_blue = red_blue

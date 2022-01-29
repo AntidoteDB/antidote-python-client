@@ -296,8 +296,27 @@ def test_rrmap(server = "localhost", port = 8087) :
     res = tx.read_objects( key)
     return res
 
+def test_committime(server = "localhost", port = 8087) :
+    key = Key( "some_bucket", "some_key_committime", "MVREG")
+    val1 = bytes("lightkone",'utf-8')
+    val2 = bytes("syncfree",'utf-8')
+
+    client = AntidoteClient(server,port)
+    tx = client.start_static_transaction()
+    res = tx.update_objects(MVRegister.AssignOp(key, val1))
+    assert(res)
+    tx = client.start_static_transaction(min_snapshot=client.last_commit)
+    res = tx.read_objects(key)
+    assert(res[0].values() == [val1])
+    res = tx.update_objects(MVRegister.AssignOp(key, val2))
+    assert(res)
+    tx = client.start_static_transaction(min_snapshot=client.last_commit)
+    res = tx.read_objects(key)
+    assert(res[0].values() == [val2])
+
 
 def test_all(server = "localhost", port = 8087):
+    test_committime(server, port)
     res = test_counter(server,port)
     res = test_fatcounter(server,port)
     res = test_lwwreg(server,port)
@@ -311,9 +330,9 @@ def test_all(server = "localhost", port = 8087):
     return res
 
 
-if len(sys.argv) == 1:
-    test_all(str(sys.argv[0]),8087)
-elif len(sys.argv) == 2:
-    test_all(str(sys.argv[0]),int(sys.argv[0]))
+if len(sys.argv) == 2:
+    test_all(str(sys.argv[1]),8087)
+elif len(sys.argv) == 3:
+    test_all(str(sys.argv[1]),int(sys.argv[2]))
 else:
     test_all()

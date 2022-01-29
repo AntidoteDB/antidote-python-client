@@ -494,9 +494,10 @@ class Key :
    
 class StaticTransaction :
     """" Class for an interative transaction """
-    def __init__(self, clt, red_blue):
+    def __init__(self, clt, red_blue, min_snapshot):
         self.antidoteClient = clt
         self.red_blue = red_blue
+        self.min_snapshot = min_snapshot
             
 
     def read_objects_raw( self, keys) :
@@ -505,6 +506,8 @@ class StaticTransaction :
         op = ApbStaticReadObjects()
         op.transaction.properties.read_write = 1
         op.transaction.properties.red_blue = self.red_blue
+        if self.min_snapshot is not None:
+            op.transaction.timestamp = self.min_snapshot
         if type( keys) != list :
             keys= [keys]
         for key in keys :
@@ -522,6 +525,8 @@ class StaticTransaction :
         op = ApbStaticReadObjects()
         op.transaction.properties.read_write = 1
         op.transaction.properties.red_blue = self.red_blue
+        if self.min_snapshot is not None:
+            op.transaction.timestamp = self.min_snapshot
         if type( keys) != list :
             keys= [keys]
         for key in keys :
@@ -547,6 +552,8 @@ class StaticTransaction :
         op = ApbStaticUpdateObjects()
         op.transaction.properties.read_write = 2
         op.transaction.properties.red_blue = self.red_blue
+        if self.min_snapshot is not None:
+            op.transaction.timestamp = self.min_snapshot
         if type( updates) != list :
             updates = [updates]
         for upd in updates :
@@ -693,13 +700,15 @@ class AntidoteClient :
             self.server = None
             raise AntidoteException( e)
 
-    def start_transaction( self, read_write = 0, red_blue = 0) :
+    def start_transaction( self, read_write = 0, red_blue = 0, min_snapshot = None) :
         """ Starts an interactive transaction, returning an object of type 
         InteractiveTransaction. Raises an exception if the operation fails.
         """
         apbtxn = ApbStartTransaction()
         apbtxn.properties.read_write = read_write
         apbtxn.properties.red_blue = red_blue
+        if min_snapshot is not None:
+            apbtxn.timestamp = min_snapshot
         self.sendMessageStartTransaction( apbtxn)
         apbtxnresp = self.recvMessageStartTransactionResp()
         if apbtxnresp.success :
@@ -707,11 +716,11 @@ class AntidoteClient :
         else :
             raise AntidoteException( "Start transaction failed")
         
-    def start_static_transaction( self, red_blue = 0) :
+    def start_static_transaction( self, red_blue = 0, min_snapshot = None) :
         """ Starts a static transaction, returning an object of type 
         StaticTransaction. Raises an exception if the operation fails.
         """
-        return StaticTransaction( self, red_blue)
+        return StaticTransaction( self, red_blue, min_snapshot)
         
                 
     #---------------------------------------------------------------------------------

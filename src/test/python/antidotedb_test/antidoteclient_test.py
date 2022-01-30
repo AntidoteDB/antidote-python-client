@@ -41,8 +41,8 @@ def test_counter( server = "localhost", port = 8087) :
     return res
 
 def test_fatcounter(server = "localhost", port = 8087) :
-    key = Key( "some_bucket", "some_key_counter", "FATCOUNTER")
-    key2 = Key( "some_bucket", "some_other_key_counter", "FATCOUNTER")
+    key = Key( "some_bucket", "some_key_fatcounter", "FATCOUNTER")
+    key2 = Key( "some_bucket", "some_other_key_fatcounter", "FATCOUNTER")
     
     clt = AntidoteClient(server,port)
     tx = clt.start_transaction()
@@ -161,9 +161,9 @@ def test_rwset(server = "localhost", port = 8087) :
     tx = clt.start_transaction()
     res = tx.read_objects( key)
     assert( type(res[0]) == Set)
-    res = tx.update_objects( Set.addKeyOp( [val1,val2], key))
+    res = tx.update_objects( Set.AddOp( key, [val1,val2]))
     assert( res)
-    res = tx.update_objects( Set.addKeyOp( val3, key))
+    res = tx.update_objects( Set.AddOp( key, val3))
     assert( res)
     res = tx.read_objects( key)
     assert( type(res[0]) == Set)
@@ -178,7 +178,7 @@ def test_rwset(server = "localhost", port = 8087) :
     assert( val1 in res[0].values())
     assert( val2 in res[0].values())
     assert( val3 in res[0].values())
-    res = tx.update_objects( Set.removeKeyOp( val2, key))
+    res = tx.update_objects( Set.RemoveOp(key, val2))
     assert( res)
     res = tx.read_objects( key)
     assert( type(res[0]) == Set)
@@ -259,10 +259,6 @@ def test_gmap(server = "localhost", port = 8087) :
     res = tx.read_objects( key)
     assert( k1 in res[0].values())
     assert( k2 in res[0].values())
-
-    res = tx.update_objects( Map.RemoveOp( key, [Key( "", k1, "COUNTER")]))
-    assert( res == False)
-
     return res
 
 def test_rrmap(server = "localhost", port = 8087) :
@@ -296,8 +292,27 @@ def test_rrmap(server = "localhost", port = 8087) :
     res = tx.read_objects( key)
     return res
 
+def test_committime(server = "localhost", port = 8087) :
+    key = Key( "some_bucket", "some_key_committime", "MVREG")
+    val1 = bytes("lightkone",'utf-8')
+    val2 = bytes("syncfree",'utf-8')
+
+    client = AntidoteClient(server,port)
+    tx = client.start_static_transaction()
+    res = tx.update_objects(MVRegister.AssignOp(key, val1))
+    assert(res)
+    tx = client.start_static_transaction(min_snapshot=client.last_commit)
+    res = tx.read_objects(key)
+    assert(res[0].values() == [val1])
+    res = tx.update_objects(MVRegister.AssignOp(key, val2))
+    assert(res)
+    tx = client.start_static_transaction(min_snapshot=client.last_commit)
+    res = tx.read_objects(key)
+    assert(res[0].values() == [val2])
+
 
 def test_all(server = "localhost", port = 8087):
+    test_committime(server, port)
     res = test_counter(server,port)
     res = test_fatcounter(server,port)
     res = test_lwwreg(server,port)
@@ -311,9 +326,9 @@ def test_all(server = "localhost", port = 8087):
     return res
 
 
-if len(sys.argv) == 1:
-    test_all(str(sys.argv[0]),8087)
-elif len(sys.argv) == 2:
-    test_all(str(sys.argv[0]),int(sys.argv[0]))
+if len(sys.argv) == 2:
+    test_all(str(sys.argv[1]),8087)
+elif len(sys.argv) == 3:
+    test_all(str(sys.argv[1]),int(sys.argv[2]))
 else:
     test_all()

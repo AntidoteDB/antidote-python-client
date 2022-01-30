@@ -1,1 +1,1 @@
-protoc -I=src/eu/antidotedb/proto  --python_out=src/eu/antidotedb/proto/ src/eu/antidotedb/proto/antidote.proto
+protoc -I=src/main/python/antidotedb/proto  --python_out=src/main/python/antidotedb/proto/ ./src/main/python/antidotedb/proto/antidote.proto

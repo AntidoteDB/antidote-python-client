@@ -43,6 +43,16 @@ _abort_ method rollbacks the transactions.
  
     tx.abort()
 
+#### Session guarantees
+
+By default, the client will not maintain a session across consecutive transactions, i.e., 
+there will be no causal dependency established between two consecutive transaction.
+
+To set these dependencies, star a transactionas follows:
+
+
+    tx = clt.start_transaction(min_snapshot=clt.last_commit)
+
 ### Operations on objects
 
 The **Key** class allows to specify the AntidoteDB key for an object.

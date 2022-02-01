@@ -13,7 +13,7 @@ with open("README.MD", "r") as fh:
 
 setuptools.setup(
     name="antidotedb",
-    version="0.1.1",
+    version="0.1.2",
     author="Nuno Preguica",
     author_email="nuno.preguica@fct.unl.pt",
     description="AntidoteDB Python clients",
